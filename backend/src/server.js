@@ -1,13 +1,21 @@
 import express from "express";
 import path from "path";
+import { clerkMiddleware } from "@clerk/express";
+
 import { ENV } from "./config/env.js";
+import { connectDB } from "./config/db.js";
 
 const app = express();
 
 const __dirname = path.resolve();
 
+app.use(clerkMiddleware());
+
 app.get("/api/health", (req, res) => {
-  res.status(200).json({ message: "Success" ,timestamp: new Date().toISOString() });
+  res.status(200).json({
+    message: "Success",
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // make app read for deployment
@@ -21,4 +29,7 @@ if (ENV.NODE_ENV === "production") {
   });
 }
 
-app.listen(ENV.PORT, () => console.log("Server is running"));
+app.listen(ENV.PORT, () => {
+  console.log("Server is running");
+  connectDB();
+});
