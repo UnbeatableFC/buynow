@@ -7,7 +7,7 @@ const app = express();
 const __dirname = path.resolve();
 
 app.get("/api/health", (req, res) => {
-  res.status(200).json({ message: "Success" });
+  res.status(200).json({ message: "Success" ,timestamp: new Date().toISOString() });
 });
 
 // make app read for deployment
