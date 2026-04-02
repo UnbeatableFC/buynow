@@ -6,11 +6,11 @@ const App = () => {
     <div>
       <h1>HOME PAGE</h1>
         <Show when="signed-out">
-          <SignInButton />
-          <SignUpButton />
+          <SignInButton mode='modal'/>
+          <SignUpButton mode='modal' />
         </Show>
         <Show when="signed-in">
-          <UserButton />
+          <UserButton/>
         </Show>
     </div>
   )
