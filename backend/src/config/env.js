@@ -2,6 +2,11 @@ import dotenv from "dotenv";
 
 dotenv.config({quiet : true});
 
+if (!process.env.ADMIN_EMAIL) {
+  throw new Error("Missing required environment variable: ADMIN_EMAIL");
+}
+
+
 export const ENV = {
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT,

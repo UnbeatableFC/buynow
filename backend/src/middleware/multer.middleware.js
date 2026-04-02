@@ -3,7 +3,12 @@ import path from "path";
 
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    const safeExt = [".jpeg", ".jpg", ".png", ".webp"].includes(ext)
+      ? ext
+      : "";
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${unique}${safeExt}`);
   },
 });
 
@@ -13,9 +18,9 @@ const fileFilter = (req, file, cb) => {
   const extname = allowedTypes.test(
     path.extname(file.originalname).toLocaleLowerCase(),
   );
-  const mimeType = allowedTypes.test(file.mimeType);
+  const mimetype = allowedTypes.test(file.mimetype);
 
-  if (extname && mimeType) {
+  if (extname && mimetype) {
     cb(null, true);
   } else {
     cb(

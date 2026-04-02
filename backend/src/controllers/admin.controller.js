@@ -25,7 +25,7 @@ export const createProduct = async (req, res) => {
     }
 
     const uploadPromises = req.files.map((file) => {
-      return cloudinary.uploader(file.path, {
+      return cloudinary.uploader.upload(file.path, {
         folder: "products",
       });
     });
@@ -78,7 +78,7 @@ export const updateProduct = async (req, res) => {
 
     if (name) product.name = name;
     if (description) product.description = description;
-    if (price) product.price = parseFloat(price);
+    if (price !== undefined) product.price = parseFloat(price);
     if (stock !== undefined) product.stock = parseInt(stock);
     if (category) product.category = category;
 
@@ -91,7 +91,7 @@ export const updateProduct = async (req, res) => {
       }
 
       const uploadPromises = req.files.map((file) => {
-        return cloudinary.uploader(file.path, {
+        return cloudinary.uploader.upload(file.path, {
           folder: "products",
         });
       });
@@ -176,7 +176,7 @@ export const getAllStats = async (_, res) => {
       {
         $group: {
           _id: null,
-          total: { sum: "$totalPrice" },
+          total: { $sum: "$totalPrice" },
         },
       },
     ]);

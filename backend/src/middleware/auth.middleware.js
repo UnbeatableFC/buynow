@@ -33,11 +33,25 @@ export const adminOnly = async (req, res, next) => {
       .status(401)
       .json({ message: "Unauthorized -User not found" });
 
-  if (req.user.email !== ENV.ADMIN_EMAIL) {
+  if (!ENV.ADMIN_EMAIL) {
+    return res
+      .status(500)
+      .json({ message: "Admin configuration missing" });
+  }
+
+  if (!req.user.email) {
     return res
       .status(403)
       .json({ message: "Forbidden - Admin access only" });
   }
 
-  next()
+  if (
+    req.user.email.toLowerCase() !== ENV.ADMIN_EMAIL.toLowerCase()
+  ) {
+    return res
+      .status(403)
+      .json({ message: "Forbidden - Admin access only" });
+  }
+
+  next();
 };
