@@ -117,6 +117,12 @@ export const deleteAddress = async (req, res) => {
     const user = req.user;
     const { addressId } = req.params;
 
+    const address = user.addresses.id(addressId);
+
+    if (!address) {
+      return res.status(404).json({ error: "Address not found" });
+    }
+
     user.addresses.pull(addressId);
     await user.save();
     res.status(200).json({
