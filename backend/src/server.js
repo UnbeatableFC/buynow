@@ -7,6 +7,7 @@ import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import { inngest, functions } from "./config/inngest.js";
 import adminRoutes from "./routes/admin.route.js"
+import userRoutes from "./routes/users.route.js"
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(
 );
 
 app.use("/api/admin" , adminRoutes)
+app.use("/api/users" , userRoutes)
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({
