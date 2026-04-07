@@ -15,6 +15,12 @@ export const addAddress = async (req, res) => {
     } = req.body;
     const user = req.user;
 
+    if (!fullName || !streetAddress || !city || !state) {
+      return res
+        .status(400)
+        .json({ error: "Missing required address fields" });
+    }
+
     // if this is set as default, unset the previous default
     if (isDefault) {
       user.addresses.forEach((addr) => {
@@ -105,6 +111,7 @@ export const updateAddress = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 export const deleteAddress = async (req, res) => {
   try {
     const user = req.user;
@@ -147,6 +154,7 @@ export const addToWishlist = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 export const removeFromWishlist = async (req, res) => {
   try {
     const { productId } = req.params;
@@ -171,9 +179,13 @@ export const removeFromWishlist = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 export const getWishlist = async (req, res) => {
   try {
-    const user = req.user;
+    // We are using populate because wishlist is just an array of product ids
+    const user = await User.findById(req.user._id).populate(
+      "wishlist",
+    );
     res.status(200).json({ wishlist: user.wishlist });
   } catch (error) {
     console.error("Error in getWishlist controller", error);
