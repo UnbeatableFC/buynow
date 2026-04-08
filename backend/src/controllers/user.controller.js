@@ -83,6 +83,11 @@ export const updateAddress = async (req, res) => {
       return res.status(404).json({ error: "Address not found" });
     }
 
+    if (!fullName || !streetAddress || !city || !state) {
+      return res
+        .status(400)
+        .json({ error: "Missing address field required" });
+    }
     // if this is set as default, unset the previous default
     if (isDefault) {
       user.addresses.forEach((addr) => {
@@ -116,7 +121,11 @@ export const deleteAddress = async (req, res) => {
   try {
     const user = req.user;
     const { addressId } = req.params;
+    const address = user.addresses.id(addressId);
 
+    if (!address) {
+      return res.status(404).json({ error: "Address not found" });
+    }
     user.addresses.pull(addressId);
     await user.save();
     res.status(200).json({
