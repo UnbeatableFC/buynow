@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import * as Sentry from "@sentry/react";
 import { orderApi, statsApi } from "../lib/api";
 import {
   DollarSignIcon,
